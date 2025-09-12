@@ -10,7 +10,7 @@ public class EnemyBehav : MonoBehaviour
     private Vector3 cross;
 
     private float currentAngle = 0f;
-    private float angularSpeed = 5f;
+    private float angularSpeed = 10f;
 
     Vector2 radius = new Vector2(0, 3f);
     
