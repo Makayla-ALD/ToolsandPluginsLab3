@@ -5,19 +5,23 @@ using UnityEngine;
 public class EnemyBehav : MonoBehaviour
 {
     private Vector2 direction;
-    private Vector2 side;
-    private Vector2 up;
-    private Vector3 cross;
+    //private Vector2 side;
+    //private Vector2 up;
+    //private Vector3 cross;
 
-    private float currentAngle = 0f;
+    public GameObject playerToOrbit;
+    public Transform player;
+
+    private float currentAngle;
     private float angularSpeed = 10f;
+    private float radius = 3f;
 
-    Vector2 radius = new Vector2(0, 3f);
+    //Vector2 radius = new Vector2(0, 3f);
     
-    [SerializeField]
-    Transform player;
-    [SerializeField]
-    private Rigidbody2D rb;
+    //[SerializeField]
+    //Transform player;
+    //[SerializeField]
+    //private Rigidbody2D rb;
     
     
     // Start is called before the first frame update
@@ -25,20 +29,31 @@ public class EnemyBehav : MonoBehaviour
     {
         //up = transform.up;
         //side = Vector3.Cross(direction, up);
-        direction = player.transform.position - transform.position;
-        transform.LookAt(player.position);
+        direction =  (transform.position - playerToOrbit.transform.position). normalized;
+        radius = Vector3.Distance(playerToOrbit.transform.position, transform.position);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        //cross = Vector3.Cross(direction, side);
+        //direction = player.transform.position - transform.position;
+        transform.LookAt(player);//enemy will look at player
+        currentAngle += angularSpeed * Time.deltaTime;
 
-        //maybe this section should be moved to start? since the (glitchy) orbiting only happens when the player starts to move???
-        currentAngle += angularSpeed * Time.deltaTime; 
-         Vector2 positionOnOrbit = player.position + Quaternion.AngleAxis(currentAngle, player.position) * radius;
-         transform.position = positionOnOrbit;
-        transform.rotation = Quaternion.AngleAxis(30, player.position);
+        if (currentAngle > 360)
+        {
+            currentAngle -= 360;
+        }
+
+        Vector2 orbit = Vector2.right * radius;
+        orbit = Quaternion.LookRotation(direction) * Quaternion.Euler(0, currentAngle, 0) * orbit;
+
+        transform.position = playerToOrbit.transform.position * orbit;
+        //cross = Vector3.Cross(direction, side);
+        //Vector2 positionOnOrbit = player.position + Quaternion.AngleAxis(currentAngle, player.position) * radius;
+        //transform.position = positionOnOrbit;
+        //Transform.Rotate(player.transform.position, Vector2.up, 20 * Time.deltaTime);
 
     }
 
