@@ -25,19 +25,20 @@ public class EnemyBehav : MonoBehaviour
     {
         //up = transform.up;
         //side = Vector3.Cross(direction, up);
+        direction = player.transform.position - transform.position;
+        transform.LookAt(player.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        //direction = player.transform.position - transform.position;
-        //transform.LookAt(player.position);
         //cross = Vector3.Cross(direction, side);
-        currentAngle += angularSpeed * Time.deltaTime;
+
+        //maybe this section should be moved to start? since the (glitchy) orbiting only happens when the player starts to move???
+        currentAngle += angularSpeed * Time.deltaTime; //maybe we don't this part???
          Vector2 positionOnOrbit = player.position + Quaternion.AngleAxis(currentAngle, player.position) * radius;
          transform.position = positionOnOrbit;
-        //transform.rotation = Quaternion.AngleAxis(30, player.position);
+        transform.rotation = Quaternion.AngleAxis(30, player.position);
 
     }
 
